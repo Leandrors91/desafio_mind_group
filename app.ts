@@ -1,23 +1,35 @@
+import { Express } from "express";
+import {Request, Response} from 'express';
+import { PrismaClient } from "@prisma/client/extension";
+
 const express = require('express');
-const app = express();
+const prisma = new PrismaClient();
 const port = 3000;
+const app = express();
 
-app.get('/',(req,res) => {
-    res.send('get');
+app.use(express.json());
+
+app.get('/users', async (req: Request, res: Response) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
 });
 
-app.post('/',(req,res) => {
-    res.send('post');
+app.post('/users', async (req: Request, res: Response) => {
+  const { email,senha } = req.body;
+  const user = await prisma.user.create({
+    data: { email,senha },
+  });
+  res.json(user);
 });
 
-app.put('/',(req,res) => {
+app.put('/',(req: Request, res: Response) => {
     res.send('put');
 });
 
-app.delete('/',(req,res) => {
+app.delete('/',(req: Request, res: Response) => {
     res.send('delete');
 });
 
 app.listen(port,() =>{
-    console.log(`server runing in http://localhost:${port}`);
+    console.log(`server is runing on http://localhost:${port}`);
 });
