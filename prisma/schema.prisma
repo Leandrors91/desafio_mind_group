@@ -15,6 +15,15 @@ datasource db {
 
 model User {
   id String @id @default(uuid())
-  email String 
+  nome String
+  foto Bytes
+  email String @unique
   senha String
+}
+
+model Despesa {
+  id String @id @default(uuid())
+  descricao String
+  valor Decimal
+  historico Decimal
 }
